@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Variables
-
 ## Names
 user=$(whoami)
 hostname=$(hostname | sed 's/.local//g')
@@ -79,33 +77,71 @@ ram="$((mem/1073741824)) GB"
 ## Disk usage
 disk=`df | head -2 | tail -1 | awk '{print $5}'`
 
-# Add a -c option to enable classic color logo
-if [[ $1 == "-c" ]]; then
-  GREEN='\033[00;32m'
-  YELLOW='\033[00;33m'
-  LRED='\033[01;31m'
-  RED='\033[00;31m'
-  PURPLE='\033[00;35m'
-  CYAN='\033[00;36m'
-  BLUE='\033[00;34m'
-fi
+#Set normal text color
+normalColor=$(tput sgr0)
+
+GREEN_='\033[00;32m'
+YELLOW_='\033[00;33m'
+LRED_='\033[01;31m'
+RED_='\033[00;31m'
+PURPLE_='\033[00;35m'
+CYAN_='\033[00;36m'
+BLUE_='\033[00;34m'
+
+# While loops for script arguments
+while [ $# -gt 0 ]; do
+    case "$1" in
+    -c|--color) 
+            GREEN="$GREEN_"
+            YELLOW="$YELLOW_"
+            LRED="$LRED_"
+            RED="$RED_"
+            PURPLE="$PURPLE_"
+            CYAN="$CYAN_"
+            BLUE="$BLUE_"
+            #Default textColor to Cyan if it hasnt already been set
+            if [[ -z $textColor ]]; then
+                textColor="$CYAN"
+            fi
+            ;;
+    -green)
+            textColor="$GREEN_"
+            ;;
+    -yellow)
+            textColor="$YELLOW_"
+            ;;
+    -red)
+            textColor="$RED_"
+            ;;
+    -purple)
+            textColor="$PURPLE_"
+            ;;
+    -cyan)
+            textColor="$CYAN_"
+            ;;
+    -blue)
+            textColor="$BLUE_"
+            ;;
+    esac
+    shift
+done
 
 # Output
 
 echo -e "
 ${GREEN}                     ,
 ${GREEN}                  ,##;            
-${GREEN}                 ####             User: $user
-${GREEN}                ;#'               Hostname: $hostname
-${GREEN}       ,#####;,   ,;#####;,       Version: $version $versionString
-${GREEN}     ######################'      Kernel: $kernel
-${YELLOW}    #####################'        Uptime: $uptime
-${YELLOW}    #####################         Shell: $shell
-${LRED}    #####################         Terminal $terminal
-${RED}    ######################,       Packages $packages
-${RED}     #######################      CPU: $cpu
-${PURPLE}      ####################'       Memory: $ram
-${BLUE}        #################'        Disk Used: $disk
-${BLUE}         '####''''####'${normal}
+${GREEN}                 ####             ${textColor}User${normalColor} $user
+${GREEN}                ;#'               ${textColor}Hostname:${normalColor} $hostname
+${GREEN}       ,#####;,   ,;#####;,       ${textColor}Version:${normalColor} $version $versionString
+${GREEN}     ######################'      ${textColor}Kernel:${normalColor} $kernel
+${YELLOW}    #####################'        ${textColor}Uptime:${normalColor} $uptime
+${YELLOW}    #####################         ${textColor}Shell:${normalColor} $shell
+${LRED}    #####################         ${textColor}Terminal:${normalColor} $terminal
+${RED}    ######################,       ${textColor}Packages:${normalColor} $packages
+${RED}     #######################      ${textColor}CPU:${normalColor} $cpu
+${PURPLE}      ####################'       ${textColor}Memory:${normalColor} $ram
+${BLUE}        #################'        ${textColor}Disk Used:${normalColor} $disk
+${BLUE}         '####''''####'${normalColor}
                                        
 "

@@ -3,6 +3,10 @@ Archey for OS X
 
 An archey script for OS X.
 
+Enable colors by using -c or --color paramter. 
+
+Set the color of the titles by using the following parameters: -green, -yellow, -red, -purple, -cyan, -blue
+
 !['Screenshot example'](https://raw.github.com/acompagno/archey-osx/master/screenshot.png)
 
 Installation

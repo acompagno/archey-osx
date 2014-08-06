@@ -69,6 +69,8 @@ packages="`brew list -l | wc -l | awk '{print $1 }'`"
 
 ## CPU Type
 cpu=$(sysctl -n machdep.cpu.brand_string)
+# removes (R) and (TM) from the CPU name so it fits in a standard 80 window
+cpu=$(echo "$cpu" | awk '$1=$1' | sed 's/([A-Z]\{1,2\})//g')
 
 ## Memory Amount
 mem=$(sysctl -n hw.memsize)
@@ -91,19 +93,19 @@ fi
 # Output
 
 echo -e "
-                  
-${GREEN}                  ###
-${GREEN}                ####                  User: $user
-${GREEN}                ###                   Hostname: $hostname
-${GREEN}       ####### ##  #######            Version: $version $versionString
-${YELLOW}     ######################           Kernel: $kernel
-${YELLOW}    #####################             Uptime: $uptime
-${LRED}    ####################              Shell: $shell
-${RED}    ####################              Terminal $terminal
-${RED}    #####################             Packages $packages
-${PURPLE}     ######################           CPU: $cpu
-${PURPLE}      ####################            Memory: $ram
-${BLUE}        ################              Disk Used: $disk
-${BLUE}         ####     ##### ${normal}
-
+${GREEN}                     ,
+${GREEN}                  ,##;            
+${GREEN}                 ####             User: $user
+${GREEN}                ;#'               Hostname: $hostname
+${GREEN}       ,#####;,   ,;#####;,       Version: $version $versionString
+${GREEN}     ######################'      Kernel: $kernel
+${YELLOW}    #####################'        Uptime: $uptime
+${YELLOW}    #####################         Shell: $shell
+${LRED}    #####################         Terminal $terminal
+${RED}    ######################,       Packages $packages
+${RED}     #######################      CPU: $cpu
+${PURPLE}      ####################'       Memory: $ram
+${BLUE}        #################'        Disk Used: $disk
+${BLUE}         '####''''####'${normal}
+                                       
 "
